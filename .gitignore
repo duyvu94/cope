@@ -1,0 +1,9 @@
+laravel_app/vendor/
+laravel_app/node_modules/
+laravel_app/npm-debug.log
+laravel_app/public/storage
+laravel_app/public/hot
+laravel_app/storage/*.key
+laravel_app/.env.*.php
+laravel_app/.env.php
+laravel_app/.env
