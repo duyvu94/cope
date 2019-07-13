@@ -8,11 +8,10 @@
         <div class="card">
           <div class="card-header card-header-primary">
             <h4 class="card-title ">Problem list</h4>
-            <p class="card-category"> Here is a subtitle for this table</p>
           </div>
           <div class="card-body">
             <div class="table-responsive">
-              <table class="table" id="problem-table">
+              <table class="table" id="problem-table" style="width:100%">
                 <thead class=" text-primary">
                   <th>
                     ID
@@ -31,23 +30,6 @@
                   </th>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>
-                      1
-                    </td>
-                    <td>
-                      Dakota Rice
-                    </td>
-                    <td>
-                      Niger
-                    </td>
-                    <td>
-                      Oud-Turnhout
-                    </td>
-                    <td class="text-primary">
-                      $36,738
-                    </td>
-                  </tr>
                 </tbody>
               </table>
             </div>
@@ -57,4 +39,20 @@
     </div>
   </div>
 </div>
+
+<script>
+	let problemList = $('#problem-table').DataTable({
+		processing: true,
+    serverSide: true,
+    ajax: "{{ route('problem.table') }}",
+    columns: [
+        {data: 'id', name: 'ID', width:"10%"},
+        {data: 'name', name: 'name'},
+        {data: 'name', name: 'name'},
+        {data: 'difficulty', name: 'name'},
+        {data: 'difficulty', name: 'difficulty'},
+    ]
+	});
+  
+</script>
 @endsection

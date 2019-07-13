@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Problem;
 use Illuminate\Http\Request;
+use DataTables;
 
 class ProblemController extends Controller
 {
@@ -12,9 +13,15 @@ class ProblemController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        if ($request->ajax()){
+
+            $data = Problem::latest()->get();
+            return DataTables::of($data)->make(true);
+            
+        }
+       
     }
 
     /**

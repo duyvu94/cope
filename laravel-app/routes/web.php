@@ -23,6 +23,8 @@ Route::group(['middleware' => 'auth'], function () {
 		return view('pages.problem_list');
 	})->name('problems');
 
+	Route::get('ProblemTable', 'ProblemController@index')->name('problem.table');
+
 	Route::get('typography', function () {
 		return view('pages.typography');
 	})->name('typography');
