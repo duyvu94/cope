@@ -51,9 +51,12 @@ class ProblemController extends Controller
      * @param  \App\Problem  $problem
      * @return \Illuminate\Http\Response
      */
-    public function show(Problem $problem)
+    public function show(Problem $problem, $problem_id)
     {
-        //
+        $problem = Problem::where('id', $problem_id)->first();
+        //var_dump($problem); exit();
+        return View('pages.problem_detail')->with(compact('problem'))->render();
+
     }
 
     /**

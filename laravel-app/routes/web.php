@@ -12,18 +12,31 @@
 */
 
 Route::get('/', function () {
+	if(Auth::check())
+		return redirect()->route('/home');
+
     return view('welcome');
 });
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home')->middleware('auth');
 
 Route::group(['middleware' => 'auth'], function () {
+	Route::redirect('/', '/home');
+
 	Route::get('problem-list', function () {
 		return view('pages.problem_list');
 	})->name('problems');
 
 	Route::get('ProblemTable', 'ProblemController@index')->name('problem.table');
+
+	Route::get('Problem/{id}', 'ProblemController@show')->name('problem.detail');
+	
+	Route::get('Problem/Submit/{problem_id}', function () {
+		return view('pages.problem_submit')->with(compact('problem_id'));
+	})->name('problem.submit');
+
 
 	Route::get('typography', function () {
 		return view('pages.typography');

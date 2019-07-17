@@ -18,6 +18,8 @@ class CreateProblemsTable extends Migration
             $table->timestamps();
             $table->string('name');
             $table->integer('difficulty');
+            $table->integer('time_limit');
+            $table->integer('memory_limit');
             $table->string('pdf_path');
         });
     }
