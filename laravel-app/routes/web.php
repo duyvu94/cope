@@ -33,9 +33,9 @@ Route::group(['middleware' => 'auth'], function () {
 
 	Route::get('Problem/{id}', 'ProblemController@show')->name('problem.detail');
 	
-	Route::get('Problem/Submit/{problem_id}', function () {
-		return view('pages.problem_submit')->with(compact('problem_id'));
-	})->name('problem.submit');
+	Route::get('Problem/Submit/{problem_id}', 'ProblemController@formSubmit')->name('problem.form.submit');
+
+	Route::get('Submit/{problem_id}', 'SubmissionController@submit')->name('submission.upload');
 
 
 	Route::get('typography', function () {
@@ -46,17 +46,9 @@ Route::group(['middleware' => 'auth'], function () {
 		return view('pages.icons');
 	})->name('icons');
 
-	Route::get('map', function () {
-		return view('pages.map');
-	})->name('map');
-
 	Route::get('notifications', function () {
 		return view('pages.notifications');
 	})->name('notifications');
-
-	Route::get('rtl-support', function () {
-		return view('pages.language');
-	})->name('language');
 
 	Route::get('upgrade', function () {
 		return view('pages.upgrade');

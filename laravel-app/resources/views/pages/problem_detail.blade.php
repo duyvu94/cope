@@ -39,7 +39,7 @@
             
             <button class="btn btn-warning btn-block">All submission</button>
 
-           	<button class="btn btn-success btn-block" onclick="window.location='{{ route('problem.submit', $problem->id) }}'" >Submit solution</button>
+           	<button class="btn btn-success btn-block" onclick="window.location='{{ route('problem.form.submit', $problem->id) }}'" >Submit solution</button>
             
           </div>
         </div>

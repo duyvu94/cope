@@ -54,11 +54,23 @@ class ProblemController extends Controller
     public function show(Problem $problem, $problem_id)
     {
         $problem = Problem::where('id', $problem_id)->first();
-        //var_dump($problem); exit();
         return View('pages.problem_detail')->with(compact('problem'))->render();
 
     }
 
+    /**
+     * Display the submission form.
+     *
+     * @param  \App\Problem  $problem
+     * @return \Illuminate\Http\Response
+     */
+    public function formSubmit(Problem $problem, $problem_id)
+    {
+        $problem = Problem::where('id', $problem_id)->first();
+        return view('pages.problem_submit')->with(compact('problem_id', 'problem'));
+    }
+
+    
     /**
      * Show the form for editing the specified resource.
      *
