@@ -35,7 +35,7 @@ Route::group(['middleware' => 'auth'], function () {
 	
 	Route::get('Problem/Submit/{problem_id}', 'ProblemController@formSubmit')->name('problem.form.submit');
 
-	Route::get('Submit/{problem_id}', 'SubmissionController@submit')->name('submission.upload');
+	Route::post('Submit/{problem_id}', 'SubmissionController@submit')->name('submission.upload');
 
 
 	Route::get('typography', function () {

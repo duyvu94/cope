@@ -16,8 +16,11 @@ class CreateSubmissionsTable extends Migration
         Schema::create('submissions', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->timestamps();
-            $table->float('point');
-            $table->string('float');
+            $table->integer('problem_id')->references('id')->on('problem')->onDelete('cascade');
+            $table->integer('user_id')->references('id')->on('user')->onDelete('cascade');
+            $table->float('point')->nullable();
+            $table->enum('language', ['c_cpp', 'pascal']);
+            $table->string('path')->nullable()->default(null);
         });
     }
 

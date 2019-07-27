@@ -16,11 +16,11 @@ class CreateProblemsTable extends Migration
         Schema::create('problems', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->timestamps();
-            $table->string('name');
-            $table->integer('difficulty');
-            $table->integer('time_limit');
-            $table->integer('memory_limit');
-            $table->string('pdf_path');
+            $table->string('name')->nullable(false);
+            $table->integer('difficulty')->nullable(false);
+            $table->integer('time_limit')->nullable(false);
+            $table->integer('memory_limit')->nullable(false);
+            $table->string('pdf_path')->nullable(false);
         });
     }
 

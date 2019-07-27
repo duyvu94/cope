@@ -4,15 +4,15 @@
 <div class="content">
   <div class="container-fluid">
     
-      <form class="row" method="POST" action="{{ route("submission.upload") }}" >
-
+      <form class="row" method="POST" action="#" >
+        {{ csrf_field() }}
         <div class="col-md-9">
           <div class="card ">
             <div class="card-header card-header-primary">
               <h4 class="card-title "> {{$problem->name}} - Code</h4>
             </div>
             <div class="card-body">
-              <div id="code-editor" style="height : 70vh"></div>
+              <div id="code-editor" name="editor" style="height : 70vh"></div>
             </div>
           </div>
         </div>
@@ -28,7 +28,7 @@
                 <option value="pascal">FreePascal</option>
               </select>
               
-              <button type="submit" class="btn btn-success btn-block" >Submit</button>
+              <button id="btn-submit" type="submit" class="btn btn-success btn-block" href="{{ route("submission.upload", $problem_id) }}">Submit</button>
               
             </div>
           </div>
@@ -49,5 +49,21 @@
     editor.session.setMode('ace/mode/' + $(this).val());
   });
   
+  $('#btn-submit').on('click', function(e){
+    e.preventDefault();
+
+    $.ajax({
+        url: $(this).attr('href'),
+        type: 'POST',
+        data: {code: editor.getValue(), language : $('#compiler-list').val() },
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    })
+    .done(function(result) {
+        console.log(result);
+    });
+  });
+
 </script>
 @endsection
