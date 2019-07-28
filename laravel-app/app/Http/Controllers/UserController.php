@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\User;
 use App\Http\Requests\UserRequest;
+
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use DataTables;
 
 class UserController extends Controller
 {
@@ -14,9 +17,30 @@ class UserController extends Controller
      * @param  \App\User  $model
      * @return \Illuminate\View\View
      */
-    public function index(User $model)
+    public function index(Request $request)
     {
-        return view('users.index', ['users' => $model->paginate(15)]);
+        if ($request->ajax()){
+
+            $data = User::latest()->get();
+            return DataTables::of($data) ->addColumn('action', function ($user) {
+                $edit_button = '<a rel="tooltip" class="btn btn-success btn-link btn-fab" data-original-title="" title=""> '
+                                .' <i class="material-icons">edit</i>'
+                                .' <div class="ripple-container"></div> '
+                                .' </a> ';
+                $delete_buttion = '<button type="button" class="btn btn-danger btn-link btn-fab" data-original-title="" title="">'
+                                . '<i class="material-icons">close</i>'
+                                . '<div class="ripple-container"></div>'
+                                .' </button> ';
+            
+
+                //if (Auth::user()->id != $user->id)
+                    return $edit_button . $delete_buttion;
+               // return $edit_button;
+            })
+            ->removeColumn('password')->make(true);
+            
+        }
+        return view('users.index');
     }
 
     /**

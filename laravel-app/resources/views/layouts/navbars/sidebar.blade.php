@@ -18,7 +18,7 @@
         </a>
       </li>
       <li class="nav-item{{ $activePage == 'table' ? ' active' : '' }}">
-        <a class="nav-link" href="{{ route('problems') }}">
+        <a class="nav-link" href="{{ route('problem.index') }}">
           <i class="material-icons">content_paste</i>
             <p>{{ __('Problem List') }}</p>
         </a>
@@ -42,7 +42,9 @@
           <p>{{ __('Notifications') }}</p>
         </a>
       </li>
-    
+
+      @if (Auth::user()->isAdmin())
+
       <hr />
       <li class="nav-item {{ ($activePage == 'profile' || $activePage == 'user-management') ? ' active' : '' }}">
         <a class="nav-link" data-toggle="collapse" href="#laravelExample" aria-expanded="true">
@@ -68,6 +70,8 @@
           </ul>
         </div>
       </li>
+
+      @endif
     </ul>
   </div>
 </div>

@@ -48,7 +48,7 @@ $(document).ready(function() {
   let problemTable = $('#problem-table').DataTable({
     processing: true,
     serverSide: true,
-    ajax: "{{ route('problem.table') }}",
+    ajax: "{{ route('problem.index') }}",
     columns: [
         {data: 'id', name: 'ID', width:"10%", className: 'info-page'},
         {data: 'name', name: 'name', className: 'info-page'},
@@ -60,8 +60,8 @@ $(document).ready(function() {
 
   $('tbody').on('click', '.info-page', function(){
     let data = problemTable.row(this.closest("tr")).data();
-    let url = 'Problem/' + data.id;
-    window.location.replace('/Problem/' + data.id)
+    let url = '/problem/' + data.id;
+    window.location.replace(url);
   });
 
 });

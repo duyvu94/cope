@@ -21,7 +21,7 @@ class ProblemController extends Controller
             return DataTables::of($data)->make(true);
             
         }
-       
+        return view('problems.index');
     }
 
     /**
@@ -54,7 +54,7 @@ class ProblemController extends Controller
     public function show(Problem $problem, $problem_id)
     {
         $problem = Problem::where('id', $problem_id)->first();
-        return View('pages.problem_detail')->with(compact('problem'))->render();
+        return View('problems.show')->with(compact('problem'))->render();
 
     }
 
@@ -67,7 +67,7 @@ class ProblemController extends Controller
     public function formSubmit(Problem $problem, $problem_id)
     {
         $problem = Problem::where('id', $problem_id)->first();
-        return view('pages.problem_submit')->with(compact('problem_id', 'problem'));
+        return view('problems.submit')->with(compact('problem_id', 'problem'));
     }
 
     

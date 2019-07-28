@@ -28,65 +28,63 @@
                     <a href="{{ route('user.create') }}" class="btn btn-sm btn-primary">{{ __('Add user') }}</a>
                   </div>
                 </div>
+                
                 <div class="table-responsive">
-                  <table class="table">
+                  <table class="table" id="user-table" style="width:100%">
                     <thead class=" text-primary">
                       <th>
-                          {{ __('Name') }}
+                        ID
                       </th>
                       <th>
-                        {{ __('Email') }}
+                        Name
                       </th>
                       <th>
-                        {{ __('Creation date') }}
+                        Admin
                       </th>
-                      <th class="text-right">
-                        {{ __('Actions') }}
+                      <th>
+                        Email
+                      </th>
+                      <th>
+                        Action
                       </th>
                     </thead>
                     <tbody>
-                      @foreach($users as $user)
-                        <tr>
-                          <td>
-                            {{ $user->name }}
-                          </td>
-                          <td>
-                            {{ $user->email }}
-                          </td>
-                          <td>
-                            {{ $user->created_at->format('Y-m-d') }}
-                          </td>
-                          <td class="td-actions text-right">
-                            @if ($user->id != auth()->id())
-                              <form action="{{ route('user.destroy', $user) }}" method="post">
-                                  @csrf
-                                  @method('delete')
-                              
-                                  <a rel="tooltip" class="btn btn-success btn-link" href="{{ route('user.edit', $user) }}" data-original-title="" title="">
-                                    <i class="material-icons">edit</i>
-                                    <div class="ripple-container"></div>
-                                  </a>
-                                  <button type="button" class="btn btn-danger btn-link" data-original-title="" title="" onclick="confirm('{{ __("Are you sure you want to delete this user?") }}') ? this.parentElement.submit() : ''">
-                                      <i class="material-icons">close</i>
-                                      <div class="ripple-container"></div>
-                                  </button>
-                              </form>
-                            @else
-                              <a rel="tooltip" class="btn btn-success btn-link" href="{{ route('profile.edit') }}" data-original-title="" title="">
-                                <i class="material-icons">edit</i>
-                                <div class="ripple-container"></div>
-                              </a>
-                            @endif
-                          </td>
-                        </tr>
-                      @endforeach
                     </tbody>
                   </table>
                 </div>
+
               </div>
             </div>
         </div>
       </div>
     </div>
   </div>
+
+
+  <script>
+	
+  $(document).ready(function() {
+  
+    let userTable = $('#user-table').DataTable({
+      processing: true,
+      serverSide: true,
+      ajax: "{{ route('user.index') }}",
+      columns: [
+          {data: 'id', name: 'id', width:"6%", className: 'info-page'},
+          {data: 'name', name: 'name', className: 'info-page'},
+          {data: 'is_admin', name: 'is_admin', className: 'info-page'},
+          {data: 'email', name: 'email', className: 'info-page'},
+          {data: 'action', name: 'action', width:"12%", className: 'info-page', orderable: false, searchable: false},
+      ]
+    });  
+  /*
+    $('tbody').on('click', '.info-page', function(){
+      let data = problemTable.row(this.closest("tr")).data();
+      let url = 'Problem/' + data.id;
+      window.location.replace('/Problem/' + data.id)
+    });
+  */
+  });
+      
+  </script>
 @endsection
