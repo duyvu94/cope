@@ -54,8 +54,12 @@ Route::group(['middleware' => 'admin'], function () {
 	//Route::resource('user', 'UserController', ['except' => ['show']]);
 
 	Route::get('user/index', 'UserController@index')->name('user.index');
-	Route::get('user/update', 'UserController@update')->name('user.update');
 	Route::get('user/create', 'UserController@create')->name('user.create');
+	Route::get('user/multi-create', 'UserController@createMulti')->name('user.create.multi');
+	Route::post('user', 'UserController@store')->name('user.store');
+	Route::get('user/edit/{user_id}', 'UserController@edit')->name('user.edit');
+	Route::put('user/{user}', 'UserController@update')->name('user.update');
+	Route::get('user/delete/{user_id}', 'UserController@destroy')->name('user.destroy');
 	
 });
 

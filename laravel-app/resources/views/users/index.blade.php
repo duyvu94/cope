@@ -6,6 +6,7 @@
       <div class="row">
         <div class="col-md-12">
             <div class="card">
+                {{ csrf_field() }}
               <div class="card-header card-header-primary">
                 <h4 class="card-title ">{{ __('Users') }}</h4>
                 <p class="card-category"> {{ __('Here you can manage users') }}</p>
@@ -25,7 +26,8 @@
                 @endif
                 <div class="row">
                   <div class="col-12 text-right">
-                    <a href="{{ route('user.create') }}" class="btn btn-sm btn-primary">{{ __('Add user') }}</a>
+                    <a href="{{ route('user.create') }}" class="btn btn-sm btn-primary">{{ __('Add an user') }}</a>
+                    <a href="{{ route('user.create.multi') }}" class="btn btn-sm btn-primary">{{ __('Add multiple users') }}</a>
                   </div>
                 </div>
                 
@@ -39,10 +41,13 @@
                         Name
                       </th>
                       <th>
+                        Email
+                      </th>
+                      <th>
                         Admin
                       </th>
                       <th>
-                        Email
+                        Class
                       </th>
                       <th>
                         Action
@@ -62,6 +67,7 @@
 
 
   <script>
+
 	
   $(document).ready(function() {
   
@@ -70,20 +76,47 @@
       serverSide: true,
       ajax: "{{ route('user.index') }}",
       columns: [
-          {data: 'id', name: 'id', width:"6%", className: 'info-page'},
-          {data: 'name', name: 'name', className: 'info-page'},
-          {data: 'is_admin', name: 'is_admin', className: 'info-page'},
-          {data: 'email', name: 'email', className: 'info-page'},
-          {data: 'action', name: 'action', width:"12%", className: 'info-page', orderable: false, searchable: false},
+          {data: 'id', name: 'id', width:"6%"},
+          {data: 'name', name: 'name'},
+          {data: 'email', name: 'email'},
+          {data: 'is_admin', name: 'is_admin'},
+          {data: 'group', name: 'group'},
+          {data: 'action', name: 'action', width:"100px", orderable: false, searchable: false},
       ]
     });  
-  /*
-    $('tbody').on('click', '.info-page', function(){
-      let data = problemTable.row(this.closest("tr")).data();
-      let url = 'Problem/' + data.id;
-      window.location.replace('/Problem/' + data.id)
+  
+    $('tbody').on('click', '.btn-profile', function(){
+      window.location.replace('/profile')
     });
-  */
+
+    $('tbody').on('click', '.btn-edit', function(){
+      let data = userTable.row(this.closest("tr")).data();
+      
+    });
+
+    $('tbody').on('click', '.btn-delete', function(){
+      let data = userTable.row(this.closest("tr")).data();
+
+      if (confirm("Are you sure you want to delete this user?")){
+        $.ajax({
+          url: $(this).attr('href'),
+          type: 'GET',
+          headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+        }).done(function($result){
+          if ($result == "OK")
+            showNotification('success', 'The user has been deleted successfully');
+          else
+            showNotification('danger', 'The user has been deleted unsuccessfully');
+
+          userTable.ajax.reload();
+        });
+      }
+      
+      
+    });
+  
   });
       
   </script>

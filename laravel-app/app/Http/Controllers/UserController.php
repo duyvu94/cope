@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use App\Group;
 use App\Http\Requests\UserRequest;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use DataTables;
 
 class UserController extends Controller
@@ -22,22 +24,30 @@ class UserController extends Controller
         if ($request->ajax()){
 
             $data = User::latest()->get();
-            return DataTables::of($data) ->addColumn('action', function ($user) {
-                $edit_button = '<a rel="tooltip" class="btn btn-success btn-link btn-fab" data-original-title="" title=""> '
+            $current_user = Auth::user();
+            return DataTables::of($data) ->addColumn('action', function ($user) use ($current_user) {
+                $edit_button = '<a rel="tooltip" class="btn btn-success btn-link btn-fab btn-edit" href="'. route('user.edit', $user->id) .'" data-original-title="" title=""> '
                                 .' <i class="material-icons">edit</i>'
                                 .' <div class="ripple-container"></div> '
                                 .' </a> ';
-                $delete_buttion = '<button type="button" class="btn btn-danger btn-link btn-fab" data-original-title="" title="">'
+                $profile_button = '<a id="abcdf" rel="tooltip" class="btn btn-success btn-link btn-fab btn-profile" data-original-title="" title=""> '
+                                .' <i class="material-icons">person</i>'
+                                .' <div class="ripple-container"></div> '
+                                .' </a> ';
+                $delete_buttion = '<button type="button" class="btn btn-danger btn-link btn-fab btn-delete" href="'. route('user.destroy', $user->id) .'" data-original-title="" title="">'
                                 . '<i class="material-icons">close</i>'
                                 . '<div class="ripple-container"></div>'
                                 .' </button> ';
             
-
-                //if (Auth::user()->id != $user->id)
+                if ($current_user->id != $user->id)
                     return $edit_button . $delete_buttion;
-               // return $edit_button;
-            })
-            ->removeColumn('password')->make(true);
+                return $profile_button;
+
+            })->addColumn('group', function ($user)  {
+
+                return $user->group->text;
+
+            })->removeColumn('password')->make(true);
             
         }
         return view('users.index');
@@ -50,7 +60,19 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('users.create');
+        $groups = Group::All();
+        return view('users.create', compact('groups'));
+    }
+
+    /**
+     * Show the form for creating multiple new users
+     *
+     * @return \Illuminate\View\View
+     */
+    public function createMulti()
+    {
+        $groups = Group::All();
+        return view('users.multiple_create', compact('groups'));
     }
 
     /**
@@ -62,7 +84,10 @@ class UserController extends Controller
      */
     public function store(UserRequest $request, User $model)
     {
-        $model->create($request->merge(['password' => Hash::make($request->get('password'))])->all());
+        $group = Group::where('id', $request->get('group_id'))->first();
+        $model->group()->associate($group);
+        $model->fill($request->merge(['password' => Hash::make($request->get('password'))])->all());
+        $model->save();
 
         return redirect()->route('user.index')->withStatus(__('User successfully created.'));
     }
@@ -73,9 +98,11 @@ class UserController extends Controller
      * @param  \App\User  $user
      * @return \Illuminate\View\View
      */
-    public function edit(User $user)
+    public function edit(Request $request, $user_id)
     {
-        return view('users.edit', compact('user'));
+        $user = User::where('id', $user_id)->first();
+        $groups = Group::All();
+        return view('users.edit', compact('user', 'groups'));
     }
 
     /**
@@ -85,13 +112,22 @@ class UserController extends Controller
      * @param  \App\User  $user
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(UserRequest $request, User  $user)
+    public function update(UserRequest $request, User $user)
     {
+        $password = $request->get('password');
+        
         $user->update(
             $request->merge(['password' => Hash::make($request->get('password'))])
                 ->except([$request->get('password') ? '' : 'password']
         ));
 
+        $group = Group::where('id', $request->get('group_id'))->first();
+        
+        if ($group->id != $user->group->id){
+            $user->group()->associate($group);
+            $user->save();
+        }
+        
         return redirect()->route('user.index')->withStatus(__('User successfully updated.'));
     }
 
@@ -101,10 +137,14 @@ class UserController extends Controller
      * @param  \App\User  $user
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(User  $user)
+    public function destroy(Request $request, $user_id)
     {
-        $user->delete();
-
-        return redirect()->route('user.index')->withStatus(__('User successfully deleted.'));
+        if ($request->ajax()) {
+            if (User::where('id', $user_id)->first()->delete())
+                return response('OK', 200);
+            else response('Not OK', 200);
+        }
+        return response(404);
+            
     }
 }

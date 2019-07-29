@@ -71,6 +71,8 @@
     <script src="{{ asset('material') }}/js/settings.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.5/ace.js" type="text/javascript" charset="utf-8"></script>
+
+    <script type="text/javascript" src="{!! asset('js/common_script.js') !!}"></script>
     
     @stack('js')
 

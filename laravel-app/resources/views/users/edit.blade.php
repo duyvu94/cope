@@ -43,6 +43,29 @@
                   </div>
                 </div>
                 <div class="row">
+                  <label class="col-sm-2 col-form-label">{{ __('Class') }}</label>
+                  <div class="col-sm-7">
+                    <div class="form-group">
+                      <select class="custom-select custom-select-sm form-control form-control-sm" id="group-list" name="group_id">
+                        @foreach ($groups as $group)
+                          <option value={{ $group->id }} @if($group->id == $user->group_id) selected @endif>{{$group->text}}</option>    
+                        @endforeach
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <label class="col-sm-2 col-form-label">{{ __('Administrator') }}</label>
+                  <div class="col-sm-7">
+                    <div class="form-group">
+                      <select class="custom-select custom-select-sm form-control form-control-sm" id="group-list" name="is_admin">
+                        <option value=0>False</option>    
+                        <option value=1 @if($user->isAdmin()) selected @endif>True</option>    
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
                   <label class="col-sm-2 col-form-label" for="input-password">{{ __(' Password') }}</label>
                   <div class="col-sm-7">
                     <div class="form-group{{ $errors->has('password') ? ' has-danger' : '' }}">

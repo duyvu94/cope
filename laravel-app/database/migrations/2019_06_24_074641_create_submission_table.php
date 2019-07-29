@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSubmissionsTable extends Migration
+class CreateSubmissionTable extends Migration
 {
     /**
      * Run the migrations.
@@ -16,8 +16,8 @@ class CreateSubmissionsTable extends Migration
         Schema::create('submissions', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->timestamps();
-            $table->integer('problem_id')->references('id')->on('problem')->onDelete('cascade');
-            $table->integer('user_id')->references('id')->on('user')->onDelete('cascade');
+            $table->integer('problem_id')->references('id')->on('problems')->onDelete('cascade');
+            $table->integer('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->float('point')->nullable();
             $table->enum('language', ['c_cpp', 'pascal']);
             $table->string('path')->nullable()->default(null);

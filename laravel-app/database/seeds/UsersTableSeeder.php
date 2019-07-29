@@ -12,11 +12,22 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
+        $k43 = DB::table('groups')->insertGetId([
+            'text' => 'K43 IT',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+        $k49 = DB::table('groups')->insertGetId([
+            'text' => 'K49 IT',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
         DB::table('users')->insert([
             'name' => 'Duy Vu',
             'email' => 'admin@csp.com',
             'email_verified_at' => now(),
             'is_admin' => true,
+            'group_id' => $k43,
             'password' => Hash::make('secret'),
             'created_at' => now(),
             'updated_at' => now()
@@ -27,6 +38,7 @@ class UsersTableSeeder extends Seeder
             'email' => 'test' . $i . '@csp.com',
             'email_verified_at' => now(),
             'is_admin' => false,
+            'group_id' => $k49,
             'password' => Hash::make('secret'),
             'created_at' => now(),
             'updated_at' => now()

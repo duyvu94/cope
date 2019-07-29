@@ -16,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'is_admin'
     ];
 
     /**
@@ -39,6 +39,10 @@ class User extends Authenticatable
 
     public function submission(){
         return $this->hasMany('App\Submission');
+    }
+
+    public function group(){
+        return $this->belongsTo('App\Group');
     }
 
     public function isAdmin(){
