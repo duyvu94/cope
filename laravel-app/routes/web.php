@@ -13,17 +13,16 @@
 
 Route::get('/', function () {
 	if(Auth::check())
-		return redirect()->route('/home');
+		return redirect()->route('home');
 
     return view('welcome');
-});
+})->name('main');
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home')->middleware('auth');
 
 Route::group(['middleware' => 'auth'], function () {
-	Route::redirect('/', '/home');
 
 	Route::get('problem', 'ProblemController@index')->name('problem.index');
 	Route::get('problem/{id}', 'ProblemController@show')->name('problem.show');
@@ -35,14 +34,6 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('typography', function () {
 		return view('pages.typography');
 	})->name('typography');
-
-	Route::get('icons', function () {
-		return view('pages.icons');
-	})->name('icons');
-
-	Route::get('notifications', function () {
-		return view('pages.notifications');
-	})->name('notifications');
 
 
 	Route::get('profile', ['as' => 'profile.edit', 'uses' => 'ProfileController@edit']);
@@ -57,6 +48,7 @@ Route::group(['middleware' => 'admin'], function () {
 	Route::get('user/create', 'UserController@create')->name('user.create');
 	Route::get('user/multi-create', 'UserController@createMulti')->name('user.create.multi');
 	Route::post('user', 'UserController@store')->name('user.store');
+	Route::post('users', 'UserController@storeMulti')->name('user.store.multi');
 	Route::get('user/edit/{user_id}', 'UserController@edit')->name('user.edit');
 	Route::put('user/{user}', 'UserController@update')->name('user.update');
 	Route::get('user/delete/{user_id}', 'UserController@destroy')->name('user.destroy');

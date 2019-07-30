@@ -29,17 +29,16 @@
             <p>{{ __('Resources') }}</p>
         </a>
       </li>
-      <li class="nav-item{{ $activePage == 'icons' ? ' active' : '' }}">
-        <a class="nav-link" href="{{ route('icons') }}">
-          <i class="material-icons">bubble_chart</i>
-          <p>{{ __('Icons') }}</p>
+      <li class="nav-item{{ $activePage == 'ranks' ? ' active' : '' }}">
+        <a class="nav-link" href="">
+          <i class="material-icons">format_list_numbered</i>
+            <p>{{ __('Ranks') }}</p>
         </a>
       </li>
-      
-      <li class="nav-item{{ $activePage == 'notifications' ? ' active' : '' }}">
-        <a class="nav-link" href="{{ route('notifications') }}">
-          <i class="material-icons">notifications</i>
-          <p>{{ __('Notifications') }}</p>
+      <li class="nav-item{{ $activePage == 'status' ? ' active' : '' }}">
+        <a class="nav-link" href="">
+          <i class="material-icons">live_tv</i>
+            <p>{{ __('Status') }}</p>
         </a>
       </li>
 
@@ -55,16 +54,22 @@
         </a>
         <div class="collapse show" id="laravelExample">
           <ul class="nav">
-            <li class="nav-item{{ $activePage == 'profile' ? ' active' : '' }}">
-              <a class="nav-link" href="{{ route('profile.edit') }}">
-                <span class="sidebar-mini"> UP </span>
-                <span class="sidebar-normal">{{ __('User profile') }} </span>
-              </a>
-            </li>
             <li class="nav-item{{ $activePage == 'user-management' ? ' active' : '' }}">
               <a class="nav-link" href="{{ route('user.index') }}">
                 <span class="sidebar-mini"> UM </span>
                 <span class="sidebar-normal"> {{ __('User Management') }} </span>
+              </a>
+            </li>
+            <li class="nav-item{{ $activePage == 'class-management' ? ' active' : '' }}">
+              <a class="nav-link" href="{{ route('user.index') }}">
+                <span class="sidebar-mini"> CM </span>
+                <span class="sidebar-normal"> {{ __('Class Management') }} </span>
+              </a>
+            </li>
+            <li class="nav-item{{ $activePage == 'class-management' ? ' active' : '' }}">
+              <a class="nav-link" href="{{ route('user.index') }}">
+                <span class="sidebar-mini"> PM </span>
+                <span class="sidebar-normal"> {{ __('Problem Management') }} </span>
               </a>
             </li>
           </ul>

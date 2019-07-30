@@ -5,7 +5,7 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-12">
-          <form method="post" action="{{ route('user.store') }}" autocomplete="off" class="form-horizontal">
+          <form method="post" action="{{ route('user.store.multi') }}" autocomplete="off" class="form-horizontal">
             @csrf
             @method('post')
 
@@ -20,14 +20,18 @@
                       <a href="{{ route('user.index') }}" class="btn btn-sm btn-primary">{{ __('Back to list') }}</a>
                   </div>
                 </div>
-                
+
+                <div id="emails-field" hidden>
+                </div>
+
                 <div class="row">
                   <label class="col-sm-2 col-form-label">{{ __('Email(s)') }}</label>
                   <div class="col-sm-7">
-                    <div class="form-group{{ $errors->has('email') ? ' has-danger' : '' }}"> 
-                      <textarea class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" rows="10" name="email" id="input-email" type="email" placeholder="{{ __('Email(s)') }}" value="{{ old('email') }}" required ></textarea>
-                      @if ($errors->has('email'))
-                        <span id="email-error" class="error text-danger" for="input-email">{{ $errors->first('email') }}</span>
+                    <div class="form-group{{ $errors->has('emails.*') ? ' has-danger' : '' }}"> 
+                      <textarea class="form-control{{ $errors->has('emails') ? ' is-invalid' : '' }}" rows="10" id="input-emails"
+                        placeholder="{{ __('Emails are separated by spaces, e.g. "abc@csp.com cde@csp.com def@csp.com"') }}"></textarea>
+                      @if ($errors->has('emails.*'))
+                        <span id="email-error" class="error text-danger" for="input-email">{{ $errors->first('emails.*') }}</span>
                       @endif
                     </div>
                   </div>
@@ -59,24 +63,16 @@
                   <label class="col-sm-2 col-form-label" for="input-password">{{ __('Default password') }}</label>
                   <div class="col-sm-7">
                     <div class="form-group{{ $errors->has('password') ? ' has-danger' : '' }}">
-                      <input class="form-control" name="password" id="input-password" value="CSPpassword" disabled />
+                      <input class="form-control" name="password" id="input-password" value=""/>
                       @if ($errors->has('password'))
                         <span id="name-error" class="error text-danger" for="input-name">{{ $errors->first('password') }}</span>
                       @endif
                     </div>
                   </div>
                 </div>
-                <div class="row" hidden>
-                  <label class="col-sm-2 col-form-label" for="input-password-confirmation">{{ __('Confirm Password') }}</label>
-                  <div class="col-sm-7">
-                    <div class="form-group">
-                      <input class="form-control" name="password_confirmation" id="input-password-confirmation" type="password" value="CSPpassword"/>
-                    </div>
-                  </div>
-                </div>
               </div>
               <div class="card-footer ml-auto mr-auto">
-                <button type="submit" class="btn btn-primary">{{ __('Add User') }}</button>
+                <button id='btn-submit' type="submit" class="btn btn-primary">{{ __('Add User(s)') }}</button>
               </div>
             </div>
           </form>
@@ -84,4 +80,21 @@
       </div>
     </div>
   </div>
+
+  <script>
+    var generate_emails = false;
+    $('#btn-submit').on('click', function(e){
+      if (!generate_emails){
+        generate_emails = true;
+        e.preventDefault();
+
+        let emailsValue = $('#input-emails').val();
+        emailsArray = emailsValue.trimLeft().trimRight().split(/\s+/);
+        for (let email in emailsArray){
+          $('#emails-field').append('<input name="emails[]"  value="'+ emailsArray[email] +'"/>');
+        }
+        $(this).trigger('click');
+      }
+    });
+  </script>
 @endsection

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\User;
 use App\Group;
 use App\Http\Requests\UserRequest;
+use App\Http\Requests\CreateUsersRequest;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -90,6 +91,29 @@ class UserController extends Controller
         $model->save();
 
         return redirect()->route('user.index')->withStatus(__('User successfully created.'));
+    }
+
+    /**
+     * Store some newly created users in storage
+     *
+     * @param  \App\Http\Requests\UserRequest  $request
+     * @param  \App\User  $model
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function storeMulti(CreateUsersRequest $request)
+    {
+        $group = Group::where('id', $request->get('group_id'))->first();
+        
+        foreach($request->get('emails') as $email){
+            $user = new User();
+            $user->group()->associate($group);
+            $user->email= $email;
+            $user->name= explode('@',$email)[0];
+            $user->fill($request->merge(['password' => Hash::make($request->get('password'))])->all());
+            $user->save();
+        }
+
+        return redirect()->route('user.index')->withStatus(__('User(s) successfully created.'));
     }
 
     /**
